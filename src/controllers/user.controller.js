@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 
 
+
 const generateAccessAndRefereshTokens = async (userId) => {
     try {
         const user = await User.findById(userId)
@@ -110,6 +111,9 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
     try {
+        if (!req.user) {
+            return res.status(401).json({ error: "User not authenticated" });
+        }
         await User.findByIdAndUpdate(
             req.user._id,
             {
